@@ -1,0 +1,11 @@
+﻿@using Northwind.Web.ViewModels;
+@model CategoryViewModel;
+
+<form action="@Url.Action("ChangeImage", "Categories")" method="post" enctype="multipart/form-data">
+    <div>
+        <input type="file" name="Avatar" />
+    </div>
+    <div>
+        <input type="submit" value="Поменять фото" />
+    </div>
+</form>
