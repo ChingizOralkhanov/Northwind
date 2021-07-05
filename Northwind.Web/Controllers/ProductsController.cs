@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Northwind.Db.Models;
 using Northwind.Db.Repositories;
 using Northwind.Web.Exceptions;
@@ -19,6 +20,7 @@ namespace Northwind.Web.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly ISupplierRepository _supplierRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
         private readonly IConfiguration _configuration;
 
@@ -26,13 +28,15 @@ namespace Northwind.Web.Controllers
                                   ICategoryRepository categoryRepository,
                                   ISupplierRepository supplierRepository,
                                   IConfiguration configuration,
-                                  IMapper mapper)
+                                  IMapper mapper, 
+                                  ILogger<ProductsController> logger)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _supplierRepository = supplierRepository;
             _configuration = configuration;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -59,22 +63,23 @@ namespace Northwind.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Product product)
+        public IActionResult Create(ProductViewModel productViewModel)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var product = _mapper.Map<Product>(productViewModel);
                     _productRepository.Add(product);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["CategoryId"] = new SelectList(_categoryRepository.GetAllCategories(), "CategoryId", "CategoryName");
                 ViewData["SupplierId"] = new SelectList(_supplierRepository.GetAllSuppliers(), "SupplierId", "CompanyName");
-                return View(product);
+                return View(productViewModel);
             }
             catch (ProductCreateException ex)
             {
-
+                _logger.LogError($"Error Occured, {ex.Message}");
                 return RedirectToAction("Error");
             }
         }
@@ -90,14 +95,17 @@ namespace Northwind.Web.Controllers
                 var product = _productRepository.GetProduct(id);
                 if (product == null)
                 {
-                    return NotFound();
+                    _logger.LogError($"Error Occured: {id} is not valid");
+                    throw new InvalidProductIdException(id.Value);
                 }
+                var productViewModel = _mapper.Map<ProductViewModel>(product);
                 ViewData["CategoryId"] = new SelectList(_categoryRepository.GetAllCategories(), "CategoryId", "CategoryName");
                 ViewData["SupplierId"] = new SelectList(_supplierRepository.GetAllSuppliers(), "SupplierId", "CompanyName");
-                return View(product);
+                return View(productViewModel);
             }
             catch (InvalidProductIdException ex)
             {
+                _logger.LogError($"Error occured: {ex}");
                 return NotFound();
             }
 
@@ -113,9 +121,9 @@ namespace Northwind.Web.Controllers
                 _productRepository.Update(productDTO);
                 return RedirectToAction("Index");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                _logger.LogError($"Error occured: {ex}");
                 return RedirectToAction("Error");
             }
 
