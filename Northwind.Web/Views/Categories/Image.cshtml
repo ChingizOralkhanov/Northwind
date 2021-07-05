@@ -1,40 +1,15 @@
 ﻿@model Northwind.Web.ViewModels.CategoryViewModel
-
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Image";
 }
 
-<h1>Index</h1>
+<h1>Image</h1>
+<div class="container">
+    <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Picture))" />
 
+    <a asp-action="UpdateImage" asp-route-id="@Model.CategoryId">Update image</a>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-               <img src=@("~/image/"+Model.FileName) asp-append-version="true"/>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <img src="@ViewBag.ImageData" />
-            </td>
-        </tr>
-    </tbody>
-</table>
-<form enctype="multipart/form-data" method="post" action ="@Url.Action("ChangeImage", "Categories")">
-    @Html.HiddenFor(x => x.CategoryId)
-    <dl>
-        <dt>
-            <label asp-for="PicFormFile"></label>
-        </dt>
-        <dd>
-            <input asp-for="PicFormFile" type="file">
-        </dd>
-    </dl>
-    <input class="btn" type="submit" value="Upload">
-</form>
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 </div>

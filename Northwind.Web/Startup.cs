@@ -1,13 +1,16 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Northwind.Db.Models;
 using Northwind.Db.Repositories;
+using Northwind.Web.Filters;
 using Northwind.Web.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -31,9 +34,15 @@ namespace Northwind.Web
             services.AddControllersWithViews();
             services.AddDbContext<NorthwindDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("NorthWind")));
+            services.AddResponseCaching(options =>
+            {
+                options.MaximumBodySize = 1024;
+                options.UseCaseSensitivePaths = true;
+            });
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<LoggingFilter>();
             RegistrationMapper(services);
 
             
@@ -52,7 +61,19 @@ namespace Northwind.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseResponseCaching();
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                new CacheControlHeaderValue()
+                {
+                    Public = true,
+                    MaxAge = TimeSpan.FromSeconds(30),
+                    NoStore = false
+                };
+                context.Response.Headers[HeaderNames.Vary] = new string[] { "Accept-Encoding" };
+                await next();
+            });
             app.UseRouting();
 
             app.UseAuthorization();

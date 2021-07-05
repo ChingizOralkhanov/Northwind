@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Northwind.Web.Filters;
 using Northwind.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace Northwind.Web.Controllers
             _logger = logger;
         }
 
+        [ServiceFilter(typeof(LoggingFilter))]
         public IActionResult Index()
         {
             return View();
@@ -31,6 +33,7 @@ namespace Northwind.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            _logger.LogError($"Error occured");
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
