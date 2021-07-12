@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Northwind.Web.ViewModels.CategoryViewModel>
-
+@using Northwind.Web.Helpers;
 @{
     ViewData["Title"] = "Categories";
 }
@@ -33,6 +33,7 @@
             </td>
             <td>
                 <a asp-action="Image" asp-route-categoryId="@item.CategoryId">Image</a>
+                @Html.Image(item.CategoryId)
             </td>
         </tr>
 }

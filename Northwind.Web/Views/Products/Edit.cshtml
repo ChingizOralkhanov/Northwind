@@ -1,11 +1,15 @@
 ﻿@model Northwind.Db.Models.Product
-
+@addTagHelper *,Northwind.Web
+@using Northwind.Web.Helpers
 @{
     ViewData["Title"] = "Edit";
+    Breadcrumb breadcrumb = new Breadcrumb() { Names = new string[] { "Index", "Edit" } };
 }
 
 <h1>Edit</h1>
-
+<div>
+    <vc:breadcrumbs breadcrumb="breadcrumb" />
+</div>
 <h4>Product</h4>
 <hr />
 <div class="row">

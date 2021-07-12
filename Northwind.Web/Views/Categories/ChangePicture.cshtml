@@ -1,6 +1,14 @@
 ﻿@using Northwind.Web.ViewModels;
 @model CategoryViewModel;
-
+@addTagHelper *, Northwind.Web
+@using Northwind.Web.Helpers
+@{
+    ViewData["Title"] = "Change Image";
+    Breadcrumb breadcrumb = new Breadcrumb() { Names = new string[] { "Index", "Image", "ChangePicture" } };
+}
+<div>
+    <vc:breadcrumbs breadcrumb="breadcrumb" />
+</div>
 <form action="@Url.Action("ChangeImage", "Categories")" method="post" enctype="multipart/form-data">
     <div>
         <input type="file" name="Avatar" />

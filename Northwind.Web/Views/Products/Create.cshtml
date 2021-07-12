@@ -1,11 +1,15 @@
 ﻿@model Northwind.Web.ViewModels.ProductViewModel
-
+@addTagHelper *, Northwind.Web
+@using Northwind.Web.Helpers
 @{
     ViewData["Title"] = "Create";
+    Breadcrumb product = new Breadcrumb() { Names = new string[] { "Index", "Create" } };
 }
-
+/Views/Shared/Components/Breadcrumbs/Default.cshtml
 <h1>Create</h1>
-
+<div>
+    <vc:breadcrumbs breadcrumb="product" />
+</div>
 <h4>Product</h4>
 <hr />
 <div class="row">
@@ -52,7 +56,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                <input class="form-check-input" asp-for="Discontinued" /> @Html.DisplayNameFor(model => model.Discontinued)
+                    <input class="form-check-input" asp-for="Discontinued" /> @Html.DisplayNameFor(model => model.Discontinued)
                 </label>
             </div>
             <div class="form-group">

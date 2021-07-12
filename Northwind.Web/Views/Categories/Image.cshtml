@@ -1,17 +1,21 @@
 ﻿@model Northwind.Web.ViewModels.CategoryViewModel
-
+@addTagHelper *, Northwind.Web
+@using Northwind.Web.Helpers
 @{
     ViewData["Title"] = "Categories";
+    Breadcrumb breadcrumb = new Breadcrumb() { Names = new string[] { "Index", "Image" } };
 }
 
 <h1>Index</h1>
-
+<div>
+    <vc:breadcrumbs breadcrumb="breadcrumb" />
+</div>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-               <img src=@("~/image/"+Model.FileName) asp-append-version="true"/>
+                <img src=@("~/image/"+Model.FileName) asp-append-version="true" />
             </th>
         </tr>
     </thead>
@@ -23,7 +27,7 @@
         </tr>
     </tbody>
 </table>
-<form enctype="multipart/form-data" method="post" action ="@Url.Action("ChangeImage", "Categories")">
+<form enctype="multipart/form-data" method="post" action="@Url.Action("ChangeImage", "Categories")">
     @Html.HiddenFor(x => x.CategoryId)
     <dl>
         <dt>
