@@ -39,39 +39,40 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var product in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => product.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.Supplier.CompanyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.QuantityPerUnit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.UnitPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.UnitsInStock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.UnitsOnOrder)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.ReorderLevel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => product.Discontinued)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id ="@product.ProductId">Edit</a>
-            </td>
-        </tr>
-}
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.Supplier.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.QuantityPerUnit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.UnitsInStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.UnitsOnOrder)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.ReorderLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => product.Discontinued)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@product.ProductId">Edit</a>
+                </td>
+            </tr>
+        }
     </tbody>
-</table>
+</table>    
