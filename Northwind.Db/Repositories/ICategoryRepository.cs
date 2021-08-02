@@ -13,5 +13,6 @@ namespace Northwind.Db.Repositories
         IEnumerable<Category> GetAllCategories();
         void Add(Category category);
         void Update(Category category);
+        void Delete(int? id);
     }
 }

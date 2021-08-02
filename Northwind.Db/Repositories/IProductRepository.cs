@@ -12,5 +12,6 @@ namespace Northwind.Db.Repositories
         IEnumerable<Product> GetAllProducts();
         void Add(Product product);
         void Update(Product product);
+        void Delete(int? id);
     }
 }

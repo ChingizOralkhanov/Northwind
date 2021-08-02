@@ -20,6 +20,13 @@ namespace Northwind.Db.Repositories
             _context.SaveChanges();
         }
 
+        public void Delete(int? id)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+            _context.Remove(product);
+            _context.SaveChanges();
+        }
+
         public IEnumerable<Product> GetAllProducts()
         {
             var products = _context.Products.ToList();
