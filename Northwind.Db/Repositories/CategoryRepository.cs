@@ -29,6 +29,13 @@ namespace Northwind.Db.Repositories
 
         }
 
+        public void Delete(int? id)
+        {
+            var category = _context.Categories.FirstOrDefault(p => p.CategoryId == id);
+            _context.Remove(category);
+            _context.SaveChanges();
+        }
+
         public IEnumerable<Category> GetAllCategories()
         {
             try
